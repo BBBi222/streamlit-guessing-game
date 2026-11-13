@@ -1,10 +1,16 @@
+"""This is the starting file for my Streamlit app."""
+
 import streamlit as st
 
-st.sidebar.write("Guess the secret object to win!")
-page1 = st.Page("guessing_game.py", title="My guessing game", icon="🤔")
+# I set the page settings here because this file starts the whole app.
+# I do not need to set them again in guessing_game.py or statistics.py.
+st.set_page_config(page_title="Guess the Object", layout="wide")
 
-page2 = st.Page("statistics.py", title="Statistics", icon="📈")
+# st.Page tells Streamlit which Python file belongs to which page.
+# Both pages use the same session_state, so Stats can read past results.
+play_page = st.Page("guessing_game.py", title="Play", default=True)
+stats_page = st.Page("statistics.py", title="Stats")
 
-pg = st.navigation(pages=[page1, page2])
-
-pg.run()
+# I keep the navigation in the sidebar.
+st.sidebar.caption("One object. Many possibilities.")
+st.navigation([play_page, stats_page]).run()
