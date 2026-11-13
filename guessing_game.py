@@ -5,7 +5,6 @@ import re  # I use this to check whether the AI returned a valid word or number.
 import streamlit as st
 from openai import OpenAI, OpenAIError
 
-
 # These settings are used for all requests to the university AI service.
 # If I want to use another model later, I only need to change MODEL.
 # I put these values at the top because they are used in several functions.
@@ -27,7 +26,6 @@ QUALITY_LABELS = {
     4: "Very close",
     5: "Correct",
 }
-
 
 # Streamlit runs this file again every time I click a button.
 # Ordinary variables would be reset, so I save the game values in session_state.
@@ -51,7 +49,6 @@ START_VALUES = {
 for name, value in START_VALUES.items():
     if name not in st.session_state:
         st.session_state[name] = value
-
 
 # I do not write the university API key into my Python file.
 # I use Streamlit secrets. 
@@ -100,7 +97,6 @@ def ask_ai(prompt):
         raise ValueError("The AI returned no text.")
     return answer
 
-
 def new_word(previous_word):
     """Ask the AI to choose one new everyday object for the round."""
     # I want one word because it is easier to check the player's guess.
@@ -124,7 +120,6 @@ No explanations or punctuation. Do not choose: {previous_word or 'none'}."""
     # a round with an invalid secret word.
     raise ValueError("Could not create a suitable word.")
 
-
 def normalize(text):
     """Prepare a guess for the simple exact-word check."""
     # A guess like "THE Piano!" should also count as "piano".
@@ -137,7 +132,6 @@ def normalize(text):
     # ^ means the beginning of the text.
     # This only removes an article at the start, not in the middle of a word.
     return re.sub(r"^(a|an|the)\s+", "", text)
-
 
 def rate_guess(guess, secret):
     """Ask the AI to rate a guess and return a number from 0 to 5."""
@@ -229,7 +223,6 @@ Return only the joke.""")
         return "Nice try. Better luck with your next guess."
     return joke
 
-
 def make_quit_joke(guesses, comparisons):
     """Ask the AI to make a short joke when someone gives up."""
     # I use a separate prompt because quitting is different from a wrong guess.
@@ -242,7 +235,6 @@ The player just gave up after {guesses} guesses and {comparisons} comparisons.
 Write ONE short, mean, playful joke about quitting, maximum 18 words.
 Do not mention or try to guess the secret object.
 Return only the joke.""")
-
 
 def save_result(result):
     """Save one finished round so I can show it on the Stats page."""
@@ -277,7 +269,6 @@ def add_message(role, text, kind="normal"):
     # I save one dictionary per chat message instead of separate lists.
     # This keeps the message text together with its role and type.
     st.session_state.messages.append({"role": role, "text": text, "kind": kind})
-
 
 # @st.dialog is a decorator. It tells Streamlit to show this function
 # in a popup instead of directly on the main page.
@@ -322,7 +313,6 @@ def quit_popup(joke):
     if st.button("Close", key="close_quit"):
         st.rerun()
 
-
 # -------------------- Page heading --------------------
 # I keep the logo next to the title instead of showing a huge image on top.
 # The first column is smaller than the second one.
@@ -347,7 +337,6 @@ with st.expander("How to play"):
 
 **4. Finish:** Guess correctly or quit to reveal the answer.
 """)
-
 
 # -------------------- Starting and finishing games --------------------
 # I only allow a new game if the previous round is finished.
@@ -406,10 +395,8 @@ if st.session_state.celebrate_win:
     st.balloons()
     st.session_state.celebrate_win = False
 
-
-# -------------------- Comparing and asking for hints --------------------
-# OLD: I showed the fields even after the game ended and disabled the buttons.
-# NOW: I only create the gameplay controls while status is "playing".
+# -------------------- Comparing and asking for hints --------------------.
+# I only create the gameplay controls while status is "playing".
 # This means there is nothing to fill in after winning or quitting.
 if st.session_state.status == "playing":
     # A bordered container keeps the comparison fields together.
@@ -640,7 +627,6 @@ if st.session_state.status == "playing":
 
         # The popup shows the joke, meme and correct answer together.
         quit_popup(joke)
-
 
 # The detailed score chart is on the Stats page, this is just extra.
 # it is inside an expander.
