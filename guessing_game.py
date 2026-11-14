@@ -6,9 +6,7 @@ import streamlit as st
 from openai import OpenAI, OpenAIError
 
 # These settings are used for all requests to the university AI service.
-# If I want to use another model later, I only need to change MODEL.
 # I put these values at the top because they are used in several functions.
-# It is easier to change the model or number of hints here than in many places.
 MODEL = "google/gemma-4-E4B-it"
 API_URL = "https://litellm.uni-osnabrueck.de/v1"
 MAX_HINTS = 8
